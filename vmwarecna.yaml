@@ -1,0 +1,33 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: vmwarecna-nginx
+  labels:
+    app: vmwarecna-nginx
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        run: vmwarecna-nginx
+    spec:
+      containers:
+        - name: vmwarecna-nginx
+          image: vmwarecna/nginx
+          ports:
+          - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vmwarecna-svc
+  labels:
+    run: vmwarecna-nginx
+spec:
+  type: NodePort
+  ports:
+  - port: 80
+    protocol: TCP
+    name: http
+  selector:
+    run: vmwarecna-nginx
